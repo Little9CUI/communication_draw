@@ -71,7 +71,6 @@ class RawEnv:
     def prop_alg2(self, i, j):
         com_list = [[1, 0], [0, -1], [0, 1], [-1, 0]]
         count = 1  # 用于prop_alg1模式中取平均
-        n = 3  # n次幂
         for k in range(len(com_list)):
             if (0 <= i + com_list[k][0] < self.env_range) & (0 <= j + com_list[k][1] < self.env_range):
                 count = count + 1
