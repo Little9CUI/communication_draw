@@ -37,9 +37,9 @@ def prop_alg2(unc_1, unc_2, n):
             unc[i][j] = math.pow(equations.exist_pro_to_log_pro(unc_1[i][j]), n) + math.pow(
                 equations.exist_pro_to_log_pro(unc_2[i][j]), n)
             if unc[i][j] > 0:
-                unc[i][j] = equations.log_pro_to_exist_pro(math.pow(unc[i][j]/2, 1 / n))  # 负数不能开方
+                unc[i][j] = equations.log_pro_to_exist_pro(math.pow(unc[i][j], 1 / n))  # 负数不能开方
             else:
-                unc[i][j] = equations.log_pro_to_exist_pro(-math.pow(-unc[i][j]/2, 1 / n))  # 负数不能开方
+                unc[i][j] = equations.log_pro_to_exist_pro(-math.pow(-unc[i][j], 1 / n))  # 负数不能开方
     return unc
 
 
