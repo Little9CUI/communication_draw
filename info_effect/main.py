@@ -9,7 +9,7 @@ from smooth_line import plot_smooth_lines
 import numpy as np
 
 
-def render(prob_map):
+def render(prob_map, com_times, search_step):
     plt.figure()
     plt.clf()
     # 调色盘 https://www.cnblogs.com/Forever77/p/11396588.html
@@ -17,6 +17,7 @@ def render(prob_map):
     sns.heatmap(prob_map, vmin=0.5, vmax=1, linewidths=1, annot=True,
                 cmap=sns.color_palette('YlGnBu', 30), fmt=".2f",
                 annot_kws={'color': 'black'}).invert_yaxis()
+    plt.savefig(str(search_step) + "_" + str(com_times-1) + "次错误探测后的纠正效果.jpg", dpi=240)
     plt.pause(10)
 
 
@@ -45,10 +46,10 @@ def main(args):
         uncertainties = [env.agents_unc[args.layers][args.layers][args.layers][args.layers]]
         while com_times < args.max_com_time:
             com_times = com_times + 1
-            if (com_times == 4) & (search_step == 1):
-                render(env.agents_unc[args.layers][args.layers])
-            if com_times == 6:
-                render(env.agents_unc[args.layers][args.layers])
+            if (com_times == 4) and (search_step == 1 or search_step == 2 or search_step == 3):
+                render(env.agents_unc[args.layers][args.layers], com_times, search_step)
+            if com_times == 8:
+                render(env.agents_unc[args.layers][args.layers], com_times, search_step)
             env.agent_com()
             # 记录中间无人机所记录的中间数值
             uncertainties.append(env.agents_unc[args.layers][args.layers][args.layers][args.layers])
@@ -81,10 +82,10 @@ if __name__ == '__main__':
     parser.add_argument('--env_range', default=11, type=int, help='环境大小=2*layers+1')
     parser.add_argument('--detect_nums', default=1, type=int, help='单步检测次数')
     parser.add_argument('--max_step', default=3, type=int, help='最大步长')
-    parser.add_argument('--max_com_time', default=50, type=int, help='单次搜索后信息交流次数')
+    parser.add_argument('--max_com_time', default=10, type=int, help='单次搜索后信息交流次数')
     parser.add_argument('--alg2_n', default=3, type=int, help='算法2的幂指数,一定得是奇数')
     parser.add_argument('--prob_correct', default=0.9, type=int, help='无人机层数')
     parser.add_argument('--prob_false_alarm', default=0.1, type=int, help='无人机层数')
-    parser.add_argument('--com_type', default='prop_alg3', type=str, help='prop_alg1/min_com/prob_equal')
+    parser.add_argument('--com_type', default='prop_alg2', type=str, help='prop_alg1/min_com/prob_equal')
     Args = parser.parse_args()
     main(Args)
